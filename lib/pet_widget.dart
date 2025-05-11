@@ -7,7 +7,7 @@ class PetWidget extends StatelessWidget {
   final Pet pet;
   final int index;
 
-  PetWidget({@required this.pet, @required this.index});
+  PetWidget({required this.pet, required this.index});
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,7 @@ class PetWidget extends StatelessWidget {
             topRight: Radius.circular(20),
           ),
           border: Border.all(
-            color: Colors.grey[200],
+            color: (Colors.grey[200] ?? Colors.grey),
             width: 1,
           ),
         ),
@@ -123,40 +123,34 @@ class PetWidget extends StatelessWidget {
 
                   Row(
                     children: [
-
                       Icon(
                         Icons.location_on,
                         color: Colors.grey[600],
                         size: 18,
                       ),
-
-                      SizedBox(
-                        width: 4,
-                      ),
-
-                      Text(
-                        pet.location,
-                        style: TextStyle(
-                          color: Colors.grey[600],
-                          fontSize: 12,
+                      SizedBox(width: 4),
+                      Expanded( // <-- Add this
+                        child: Text(
+                          pet.location,
+                          style: TextStyle(
+                            color: Colors.grey[600],
+                            fontSize: 12,
+                          ),
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
-
-                      SizedBox(
-                        width: 4,
-                      ),
-
+                      SizedBox(width: 4),
                       Text(
-                        "(" + pet.distance + "km)",
+                        "(${pet.distance}km)",
                         style: TextStyle(
                           color: Colors.grey[600],
                           fontSize: 12,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-
                     ],
                   ),
+
 
                 ],
               ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:pet_finder/data.dart';
 import 'package:pet_finder/pet_widget.dart';
 import 'package:pet_finder/category_list.dart';
@@ -17,7 +18,6 @@ class _PrincipalState extends State<Principal> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        brightness: Brightness.light,
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: Icon(
@@ -32,7 +32,7 @@ class _PrincipalState extends State<Principal> {
               color: Colors.grey[800],
             ),
           ),
-        ],
+        ], systemOverlayStyle: SystemUiOverlayStyle.dark,
       ),
       body: SingleChildScrollView(
         physics: BouncingScrollPhysics(),
@@ -122,15 +122,15 @@ class _PrincipalState extends State<Principal> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      buildPetCategory(Category.HAMSTER, "56", Colors.orange[200]),
-                      buildPetCategory(Category.CAT, "210", Colors.blue[200]),
+                      buildPetCategory(Category.HAMSTER, "56", Colors.orange[200] ?? Colors.orange),
+                      buildPetCategory(Category.CAT, "210",Colors.grey[200] ?? Colors.grey,)
                     ],
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      buildPetCategory(Category.BUNNY, "90", Colors.green[200]),
-                      buildPetCategory(Category.DOG, "340", Colors.red[200]),
+                      buildPetCategory(Category.BUNNY, "90", Colors.green[200] ?? Colors.green),
+                      buildPetCategory(Category.DOG, "340", Colors.red[200] ?? Colors.red),
                     ],
                   ),
                 ],
@@ -195,7 +195,7 @@ class _PrincipalState extends State<Principal> {
             ),
 
             Container(
-              height: 130,
+              height: 150,
               margin: EdgeInsets.only(bottom: 16),
               child: PageView(
                 physics: BouncingScrollPhysics(),
@@ -229,7 +229,7 @@ class _PrincipalState extends State<Principal> {
           margin: EdgeInsets.all(8),
           decoration: BoxDecoration(
             border: Border.all(
-              color: Colors.grey[200],
+              color: Colors.grey[200] ?? Colors.grey,
               width: 1,
             ),
             borderRadius: BorderRadius.all(
@@ -309,22 +309,20 @@ class _PrincipalState extends State<Principal> {
     return list;
   }
 
-  Widget buildVet(String imageUrl, String name, String phone){
+  Widget buildVet(String imageUrl, String name, String phone) {
     return Container(
       margin: EdgeInsets.only(left: 16, right: 16, bottom: 16, top: 4),
       padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(
-          Radius.circular(25),
-        ),
+        borderRadius: BorderRadius.all(Radius.circular(25)),
         border: Border.all(
           width: 1,
-          color: Colors.grey[300],
+          color: Colors.grey[300] ?? Colors.grey,
         ),
       ),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start, // important
         children: [
-
           Container(
             height: 98,
             width: 98,
@@ -335,79 +333,55 @@ class _PrincipalState extends State<Principal> {
               ),
             ),
           ),
-
-          SizedBox(
-            width: 16,
-          ),
-
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-
-              Text(
-                name,
-                style: TextStyle(
-                  color: Colors.grey[800],
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-
-              SizedBox(
-                height: 8,
-              ),
-
-              Row(
-                children: [
-
-                  Icon(
-                    Icons.phone,
+          SizedBox(width: 16),
+          Flexible( // Using Flexible instead of Expanded
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min, // Ensures Column takes only required space
+              children: [
+                Text(
+                  name,
+                  style: TextStyle(
                     color: Colors.grey[800],
-                    size: 18,
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
                   ),
-
-                  SizedBox(
-                    width: 8,
+                ),
+                SizedBox(height: 8),
+                Row(
+                  children: [
+                    Icon(Icons.phone, color: Colors.grey[800], size: 18),
+                    SizedBox(width: 8),
+                    Text(
+                      phone,
+                      style: TextStyle(
+                        color: Colors.grey[800],
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
+                SizedBox(height: 8),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.green[100],
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
                   ),
-
-                  Text(
-                    phone,
+                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  child: Text(
+                    "OPEN - 24/7",
                     style: TextStyle(
-                      color: Colors.grey[800],
-                      fontSize: 14,
+                      color: Colors.green,
                       fontWeight: FontWeight.bold,
+                      fontSize: 12,
                     ),
                   ),
-
-                ],
-              ),
-
-              SizedBox(
-                height: 8,
-              ),
-
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.green[100],
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(10),
-                  ),
                 ),
-                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                child: Text(
-                  "OPEN - 24/7",
-                  style: TextStyle(
-                    color: Colors.green,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 12,
-                  ),
-                ),
-              ),
-
-            ],
+              ],
+            ),
           ),
-
         ],
       ),
     );

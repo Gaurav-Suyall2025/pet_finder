@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:pet_finder/data.dart';
 import 'package:pet_finder/user_avatar.dart';
 
@@ -6,7 +7,7 @@ class PetDetail extends StatelessWidget {
 
   final Pet pet;
 
-  PetDetail({@required this.pet});
+  PetDetail({required this.pet});
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +15,6 @@ class PetDetail extends StatelessWidget {
       backgroundColor: Colors.white,
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        brightness: Brightness.light,
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: GestureDetector(
@@ -34,7 +34,7 @@ class PetDetail extends StatelessWidget {
               color: Colors.grey[800],
             ),
           ),
-        ],
+        ], systemOverlayStyle: SystemUiOverlayStyle.dark,
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -249,7 +249,7 @@ class PetDetail extends StatelessWidget {
                           ),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.blue[300].withOpacity(0.5),
+                              color: (Colors.blue[300] ?? Colors.blue).withOpacity(0.5),
                               spreadRadius: 3,
                               blurRadius: 5,
                               offset: Offset(0, 0),
@@ -283,12 +283,12 @@ class PetDetail extends StatelessWidget {
   buildPetFeature(String value, String feature){
     return Expanded(
       child: Container(
-        height: 70,
+        height: 80,
         padding: EdgeInsets.all(12),
         margin: EdgeInsets.symmetric(horizontal: 8),
         decoration: BoxDecoration(
           border: Border.all(
-            color: Colors.grey[200],
+            color: (Colors.grey[200] ?? Colors.grey),
             width: 1,
           ),
           borderRadius: BorderRadius.all(
@@ -297,7 +297,6 @@ class PetDetail extends StatelessWidget {
         ),
         child: Column(
           children: [
-
             Text(
               value,
               style: TextStyle(

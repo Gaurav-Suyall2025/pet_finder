@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:pet_finder/data.dart';
 import 'package:pet_finder/pet_widget.dart';
 
@@ -6,14 +7,13 @@ class CategoryList extends StatelessWidget {
 
   final Category category;
 
-  CategoryList({@required this.category});
+  CategoryList({required this.category});
 
    @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        brightness: Brightness.light,
         backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: true,
@@ -40,7 +40,7 @@ class CategoryList extends StatelessWidget {
               color: Colors.grey[800],
             ),
           ),
-        ],
+        ], systemOverlayStyle: SystemUiOverlayStyle.dark,
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -68,10 +68,17 @@ class CategoryList extends StatelessWidget {
                 childAspectRatio: 1 / 1.55,
                 crossAxisCount: 2,
                 crossAxisSpacing: 15,
-                children: getPetList().where((i) => i.category == category).map((item) {
+                children: getPetList()
+                    .where((i) => i.category == category)
+                    .toList()
+                    .asMap()
+                    .entries
+                    .map((entry) {
+                  int index = entry.key;
+                  var item = entry.value;
                   return PetWidget(
                     pet: item,
-                    index: null,
+                    index: index,
                   );
                 }).toList(),
               ),
@@ -83,7 +90,7 @@ class CategoryList extends StatelessWidget {
     );
   }
 
-  Widget buildFilter(String name, bool selected){
+  Widget buildFilter(String name, bool selected) {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       decoration: BoxDecoration(
@@ -92,17 +99,19 @@ class CategoryList extends StatelessWidget {
         ),
         border: Border.all(
           width: 1,
-          color: selected ? Colors.transparent : Colors.grey[300],
+          color: selected ? Colors.transparent : (Colors.grey[300] ?? Colors.grey),
         ),
         boxShadow: [
           BoxShadow(
-            color: selected ? Colors.blue[300].withOpacity(0.5) : Colors.white,
+            color: selected
+                ? (Colors.blue[300]?.withOpacity(0.5) ?? Colors.blue.withOpacity(0.5))
+                : Colors.white,
             spreadRadius: 3,
             blurRadius: 5,
             offset: Offset(0, 0),
           ),
         ],
-        color: selected ? Colors.blue[300] : Colors.white,
+        color: selected ? (Colors.blue[300] ?? Colors.blue) : Colors.white,
       ),
       child: Row(
         children: [
@@ -111,27 +120,20 @@ class CategoryList extends StatelessWidget {
             style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.bold,
-              color: selected ? Colors.white : Colors.grey[800],
+              color: selected ? Colors.white : (Colors.grey[800] ?? Colors.black),
             ),
           ),
-
-          selected 
-          ? Row(
-            children: [
-
-              SizedBox(
-                width: 8,
-              ),
-
-              Icon(
-                Icons.clear,
-                color: Colors.white,
-                size: 18,
-              ),
-
-            ],
-          )
-          : Container(),
+          if (selected)
+            Row(
+              children: [
+                SizedBox(width: 8),
+                Icon(
+                  Icons.clear,
+                  color: Colors.white,
+                  size: 18,
+                ),
+              ],
+            ),
         ],
       ),
     );
